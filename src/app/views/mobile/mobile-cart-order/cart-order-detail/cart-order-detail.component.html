@@ -1,0 +1,112 @@
+
+
+<ngx-spinner [fullScreen]="false" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+<!-- tracking map -->
+<section class="checkout-page section-padding bg-light-theme">
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        <button (click)="Back()" class="btn btn-success full-width">
+          <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          {{'Back' | translate}}
+        </button>
+      </div>
+      <div class="col-3">
+
+      </div>
+      <div class="col-3">
+
+      </div>
+      <div class="col-3">
+        <button (click)="addMoreOrder()" class="btn btn-success full-width">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+          {{'Order.Edit' | translate}}
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="recipt-sec padding-20">
+          <div class="u-line mb-xl-20">
+            <div class="row">
+              <div class="col-lg-12">
+                <h5 class="text-light-black fw-600 title">{{'Order Table' | translate}}: {{trackingData?.order_table}}
+                  <span>
+                    <a href="javascript:void(0)" class="fs-12">{{'Print recipt' | translate}}</a></span></h5>
+                <p class="title text-light-white">{{trackingData?.order_date | date:'MMM d, y, h:mm a'}} <span class="text-light-black">{{'Cart.Detail.Order.label' | translate}} #{{trackingData?.orderID}}</span>
+                </p>
+              </div>
+              <div class="col-lg-12">
+                <ng-container *ngFor="let item_product of trackingData?.list_product; let i=index">
+                  <div class="checkout-product">
+                    <div class="img-name-value">
+                      <div class="product-img">
+                        <a href="javascript:void(0)">
+                        <img [src]="imagePath(item_product.photoPath)" style="width: 100px;height: 100px;" alt="#">
+                        </a>
+                      </div>
+                      <div class="product-value"> <span class="text-light-white">{{item_product.qty}}</span>
+                      </div>
+                      <div class="product-name">
+                        <span>
+                          <a href="javascript:void(0)" class="text-light-white">{{item_product.productName}}</a>
+                        </span>
+                        <span *ngIf="item_product.productSize > 0" class="text-light-white" >
+                          <p>{{'Size' | translate}}: {{item_product.productSizeTitle}}</p>
+                          <p>{{'Topping' | translate}}: {{item_product.productOptionTitle}}</p>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="price"> <span class="text-light-white">${{item_product.productOfAllPrice}}</span>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-7">
+              <div class="payment-method mb-md-40">
+                <h5 class="text-light-black fw-600">{{'Payment Method' | translate}}</h5>
+                <div class="method-type"> <i class="far fa-credit-card text-dark-white"></i>
+                  <span class="text-light-white">{{trackingData?.pay_Method}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-5">
+              <!-- <div class="price-table u-line">
+                <div class="item"> <span class="text-light-white">{{'Item subtotal' | translate}}:</span>
+                  <span class="text-light-white">${{trackingData?.product_total_price}}</span>
+                </div>
+
+              </div> -->
+              <div class="total-price padding-tb-10">
+                <h5 class="title text-light-black fw-700">{{'Total' | translate}}: <span>${{trackingData?.product_total_price}}</span></h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-12">
+        <button (click)="orderConfirm()" class="btn btn-success full-width">
+          {{'Order.Confirm' | translate}}
+        </button>
+      </div>
+    </div>
+
+    <hr style="color: transparent;">
+    <div class="row">
+      <div class="col-12">
+        <button (click)="orderCancel()" class="btn btn-primary full-width">
+          {{'Order.Cancel' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+

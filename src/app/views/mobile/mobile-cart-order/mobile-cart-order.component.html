@@ -1,0 +1,274 @@
+<nav aria-label="breadcrumb" class="mobile-nav">
+  <ol class="breadcrumb mobile-breadcrumb">
+    <li class="breadcrumb-item"><a href="mobile/home">{{'Home' | translate}}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{'NAV_ORDER' | translate}}</li>
+  </ol>
+</nav>
+<ngx-spinner [fullScreen]="false" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+
+<div class="row">
+<div class="col-12">
+  <div class="card main-card">
+    <div class="card-body table-responsive p-0">
+      <ejs-grid
+        #grid
+        id="grid"
+        height="600px"
+        (dataBound)='dataBound()'
+        [dataSource]="data"
+        [allowPaging]="true"
+        [allowResizing]="true"
+        [showColumnMenu]="false"
+        [allowSorting]="true"
+        [allowExcelExport]="true"
+        [toolbar]="toolbarOptions"
+        [pageSettings]="pageSettings"
+        [enableInfiniteScrolling]="true"
+        gridLines="Both"
+        [editSettings]="editSettings"
+        (toolbarClick)="toolbarClick($event)"
+(rowSelected)="rowSelected($event)"
+
+        (excelExportComplete)="excelExpComplete($event)"
+      >
+      <ng-template #parentTemplate let-data>
+        <app-back-previous-page></app-back-previous-page>
+        <span style="color: transparent;"> | </span>
+        <ejs-daterangepicker (change)="deposit($event)" id="daterangepicker" #range [(value)]='value'  ></ejs-daterangepicker>
+        <span style="color: transparent;"> | </span>
+        <button (click)="refresh()" class="btn btn-info">
+          <i class="fa fa-retweet" aria-hidden="true"></i>
+        </button>
+        
+
+        
+      </ng-template>
+        <e-columns>
+          <e-column
+            field="option"
+            textAlign="Left"
+            headerTextAlign="Left"
+            [allowSorting]="false"
+            [allowSearching]="false"
+            width="30"
+            [allowGrouping]="false"
+            [allowFiltering]="false"
+            [allowEditing]="false"
+            headerText="{{ 'OPTION' | translate }}"
+          >
+            <ng-template #template let-data>
+              <button (click)="detail(data)" class="btn btn-info">
+                <i class="fa fa-info-circle"></i> 
+              </button>
+            </ng-template>
+          </e-column>
+
+
+          <e-column
+            field="guid"
+            textAlign="Left"
+            style="white-space: break-spaces;"
+            width="80"
+            headerTextAlign="Left"
+            headerText="{{ 'ORDER_DATE' | translate }}"
+          >
+          <ng-template #template let-data>
+            {{data.createDate | date: 'yyyy-MM-dd hh:mm a'}}
+          </ng-template>
+          
+          </e-column>
+
+          <e-column
+            field="guid"
+            width="50"
+            style="white-space: break-spaces; "
+            textAlign="Left"
+            headerTextAlign="Left"
+            headerText="{{ 'ORDER_TOTAL' | translate }}"
+          >
+          <ng-template #template let-data>
+           {{'Currency' | translate}} {{data.totalPrice}}
+          </ng-template>
+          
+          </e-column>
+
+          <e-column
+            field="guid"
+            textAlign="Left"
+            width="50"
+            style="white-space: break-spaces; vertical-align: top;"
+            headerTextAlign="Left"
+            headerText="{{ 'ORDER_TABLE' | translate }}"
+          >
+          <ng-template #template let-data>
+           {{data.tableNo !== null ? data.tableNo : 'N/A'}}
+          </ng-template>
+          
+          </e-column>
+
+          <e-column
+            field="isPayment"
+            width="50"
+            style="white-space: break-spaces;"
+            textAlign="Left"
+            headerTextAlign="Left"
+            headerText="{{ 'ORDER_STATUS' | translate }}"
+          >
+          <ng-template #template let-data>
+            
+            
+            <span *ngIf="data.isPayment === 'Paid'" class="badge badge-success">{{data.isPayment | translate}}</span>
+            <span *ngIf="data.isPayment === 'Unpaid'" class="badge badge-danger">{{data.isPayment | translate}}</span>
+            <span *ngIf="data.isPayment === 'Cancel'" class="badge badge-dark">{{data.isPayment | translate}}</span>
+            
+          </ng-template>
+          
+          </e-column>
+          <e-column
+            field="paymentType"
+            width="80"
+            textAlign="Left"
+            style="white-space: break-spaces;"
+            headerTextAlign="Left"
+            headerText="{{ 'ORDER_PAYMENT_METHOD' | translate }}"
+          >
+          </e-column>
+        </e-columns>
+      </ejs-grid>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<ng-template #optionModal let-modal>
+  <div class="modal-header my-modal">
+    <h4 [ngbTooltip]="title" class="modal-title">
+      <i class="fas fa-plus"></i> {{ title | translate }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" id="option">
+
+    <div class="row">
+      
+
+      <div class="col-md-12">
+        <label *ngIf="model.id > 0" style="color: transparent;" for="uid">{{ "ORDER_ID" | translate }}</label>
+        <div class="form-group">
+          <label for="uid">{{ "ORDER_ID" | translate }}</label>
+          <input
+            [(ngModel)]="model.guid"
+            maxlength="200"
+            type="text"
+            readonly
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <label *ngIf="model.id > 0" style="color: transparent;" for="uid">{{ "CUSTOMER" | translate }}</label>
+        <div class="form-group">
+          <label for="uid">{{ "CUSTOMER" | translate }}</label>
+          <input
+            [(ngModel)]="model.customerName"
+            maxlength="200"
+            [readOnly]=""
+            type="text"
+            readonly
+            class="form-control"
+          />
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label *ngIf="model.id > 0" style="color: transparent;" for="uid">{{ "ORDER_DATE" | translate }}</label>
+        <div class="form-group">
+          <label for="uid">{{ "ORDER_DATE" | translate }}</label>
+          <input
+            [(ngModel)]="model.createDate"
+            maxlength="200"
+            readOnly
+            type="datetime"
+            readonly
+            class="form-control"
+          />
+        </div>
+      </div>
+
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="status">{{ "TOTAL_PRICE" | translate }}</label>
+          <input
+            readonly
+            [(ngModel)]="model.totalPrice "
+            type="text"
+            class="form-control"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="status">{{ "PAYMENT_METHOD" | translate }}</label>
+          <app-my-code-type-dropdownlist
+            id="paymentMethod-type-remote"
+            [codeType]="'Payment_Method'"
+            [(selectedValue)]="model.paymentType"
+          >
+          </app-my-code-type-dropdownlist>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="status">{{ "PAYMENT_STATUS" | translate }}</label>
+          <app-my-code-type-dropdownlist
+            id="paymentStatus-type-remote"
+            [codeType]="'Payment_Status'"
+            [(selectedValue)]="model.isPayment"
+          >
+          </app-my-code-type-dropdownlist>
+        </div>
+      </div>
+
+  
+
+     
+    </div>
+
+   
+</div>
+
+  <div class="modal-footer">
+    
+    <button
+      type="button"
+      class="btn btn-light"
+      ngbTooltip="CLOSE"
+      (click)="modal.close('Close click')"
+    >
+      {{ "CLOSE" | translate }}
+    </button>
+    <button
+      type="submit"
+      (click)="save()"
+      ngbTooltip="SAVE"
+      class="btn btn-primary"
+    >
+      {{ "SAVE" | translate }}
+    </button>
+  </div>
+</ng-template>

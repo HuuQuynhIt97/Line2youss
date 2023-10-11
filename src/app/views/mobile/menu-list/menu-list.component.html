@@ -1,0 +1,450 @@
+<nav aria-label="breadcrumb" class="mobile-nav">
+  <ol class="breadcrumb mobile-breadcrumb">
+    <!-- <li class="breadcrumb-item"><a href="mobile/home">{{'Home' | translate}}</a></li> -->
+    <li class="breadcrumb-item active" aria-current="page">{{'Products List' | translate}}</li>
+  </ol>
+</nav>
+
+<div class="container">
+  <ngx-spinner [fullScreen]="false" type="square-jelly-box" size="medium">
+    <p class="loading">Loading data...</p>
+  </ngx-spinner>
+  <div class="row">
+  <div class="col-12">
+
+    <div class="card main-card">
+      <div class="card-body table-responsive p-0">
+        <ejs-grid
+        #grid
+        id='grid'
+        [toolbar]="toolbarOptions"
+        [dataSource]='data'
+        [allowPaging]="true"
+        (dataBound)='dataBound()'
+        [editSettings]="editSettings"
+        (toolbarClick)="toolbarClick($event)"
+        [pageSettings]="pageSettings"
+          >
+          <ng-template #parentTemplate let-data>
+            <!-- <app-back-previous-page></app-back-previous-page>
+            <span style="color: transparent;"> | </span> -->
+            <ejs-dropdownlist
+              style="width: 200px"
+              [fields]="categoryFields"
+              [allowFiltering]="true"
+              id="toolbar_dropdown"
+              #toolbar_dropdown
+              (change)="CategoryFilter($event)"
+              (open)="onOpenPopUpMainDropdown($event)"
+              placeholder="{{'Select Category' | translate}}"
+              [dataSource]="categoryData"
+            >
+            </ejs-dropdownlist>
+          </ng-template>
+        <e-columns>
+            <e-column field='ContactName' headerText='' >
+              <ng-template #template let-data>
+                  <div class="card m-0 p-0">
+                    <div class="card-header bg-primary text-white">
+                      {{data.subject}}
+                      <span style="color: transparent;"> || </span>
+                      <span (click)="delete(data.id)" class="delete-grid">
+                        <i class="fa fa-trash"></i>
+                      </span>
+                      <span (click)="openModal(optionModal, data)" class="edit-grid">
+                        <i class="fa fa-edit"></i>
+                      </span>
+                    </div>
+                    <div
+                      class="card-body p-0"
+                      [style.background-color]="data.recordDate === null ? '#f5dada' : '#1576b61f' "
+                    >
+
+                    <div class="d-flex justify-content-start mt-2">
+                        <div style="width: 40%">
+                          <div class="d-flex justify-content-start">
+
+                            <img
+                            width="100%"
+                            [src]="imagePath(data.photoPath)"
+                            class="avatar"
+                          />
+                          </div>
+                        </div>
+                        <div style="width: 50%">
+                          <div class="d-flex justify-content-start">
+                            <div style="width: 50%" >
+                              <div style=" word-wrap: break-word;">&nbsp;&nbsp;{{data.createDate | date: "yyyy-MM-dd"}}</div>
+                              <!-- <div style=" word-wrap: break-word;" [innerHtml]="data.content"></div> -->
+                              <div style=" word-wrap: break-word;">{{data.productName}}</div>
+                              <div class="container">
+                                <div class="row">
+                                  <p *ngIf="data.productPriceDiscount !== null" style="color: red; text-decoration: line-through;">{{data.productPriceDiscount}}$</p>
+                                  <p *ngIf="data.productPriceDiscount !== null">  -  </p>
+                                  <p>{{data.productPrice}}$</p>
+                                </div>
+                              </div>
+
+                              <div style=" word-wrap: break-word;">&nbsp;&nbsp;&nbsp;&nbsp;{{data.comment}}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </ng-template>
+            </e-column>
+
+        </e-columns>
+        </ejs-grid>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>
+
+  </div>
+  <ng-template #optionModal let-modal>
+    <div class="modal-header my-modal">
+      <h4 [ngbTooltip]="title" class="modal-title">
+        <i class="fas fa-plus"></i> {{ title | translate }}
+      </h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" id="option">
+
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <label for="engineerSex">{{ "CATEGORY" | translate }}</label>
+            <span *ngIf="!(model.id > 0)" style="color: red">(*)</span>
+            <ejs-dropdownlist
+              [fields]="categoryFields"
+              [allowFiltering]="true"
+              id="categorydropdown"
+              #categorydropdown
+              (open)="onOpenPopUpFuneralModal($event)"
+              [(ngModel)]="model.categoryGuid"
+              placeholder="{{'Select Category' | translate}}"
+              [dataSource]="categoryData"
+            >
+            </ejs-dropdownlist>
+            <!-- <app-code-type-dropdownlist
+              id="webnew-type-remote"
+              [codeType]="'WebNews_Type'"
+              [(selectedValue)]="model.categoryGuid"
+            >
+            </app-code-type-dropdownlist> -->
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="uid">{{ "PRODUCT_NAME" | translate }}</label>
+            <input
+              [(ngModel)]="model.productName"
+              maxlength="200"
+              type="text"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="uid">{{ "PRODUCT_PRICE" | translate }}</label>
+            <span *ngIf="!(model.id > 0)" style="color: red">(*)</span>
+            <input
+              [(ngModel)]="model.productPrice"
+              maxlength="200"
+              type="number"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="uid">{{ "PRODUCT_PRICE_DISCOUNT" | translate }}</label>
+            <span *ngIf="!(model.id > 0)" style="color: red">(*)</span>
+            <input
+              [(ngModel)]="model.productPriceDiscount"
+              maxlength="200"
+              type="number"
+              class="form-control"
+            />
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="uid">{{ "PRODUCT_SIZE" | translate }}</label>
+            <span *ngIf="!(model.id > 0)" style="color: red">(*)</span>
+            <br>
+            <button class="btn btn-primary btn-sm" (click)="formArraySize.push(getFormGroup(null))">Add</button>
+            <div [formGroup]="formArraySize">
+              <div *ngFor="let group of formArraySize.controls; let i = index" [formGroup]="group">
+
+
+                <div class="form-row align-items-center">
+                  <div class="col-sm-6 md-6 my-1">
+                    <label class="sr-only" >Name</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div *ngIf="group.get('name').invalid" style="color: red" class="input-group-text">*</div>
+                      </div>
+                      <input type="text" class="form-control"  placeholder="S,M,L....." formControlName="name">
+                    </div>
+                  </div>
+                  <div class="col-sm-6 md-6 my-1">
+                    <label class="sr-only" >Price</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div *ngIf="group.get('price').invalid" style="color: red" class="input-group-text">*</div>
+                      </div>
+                      <input type="text" class="form-control"  placeholder="price....." formControlName="price">
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span *ngIf="group.get('name').invalid" class="input-group-text" style="color: red" >*</span>
+                  </div>
+                  <input class="form-control" placeholder="S,M,L....." formControlName="name" />
+                </div>
+
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span *ngIf="group.get('price').invalid" style="color: red" >*</span>
+                  </div>
+                  <input class="form-control" placeholder="price....." formControlName="price" />
+                </div> -->
+
+                <!-- <span *ngIf="group.get('name').invalid && group.get('name').touched" style="color: red" >*</span>
+                <input class="form-control" placeholder="S,M,L....." formControlName="name" />
+
+                <span *ngIf="group.get('price').invalid && group.get('price').touched" style="color: red" >*</span>
+                <input class="form-control" placeholder="price....." formControlName="price" /> -->
+                <button class="btn btn-warning btn-sm" (click)="formArraySize.removeAt(i)">{{'Remove' | translate}}</button>
+              </div>
+            </div>
+            <!-- <mat-form-field class="example-chip-list">
+              <mat-chip-list #chipListSize aria-label="Fruit selection">
+                <mat-chip
+                  *ngFor="let fruit of model.productSize"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="removeSize(fruit)">
+                  {{fruit}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Input size..."
+                  #fruitInput
+                  [formControl]="fruitCtrl"
+                  [matChipInputFor]="chipListSize"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="addSize($event)">
+              </mat-chip-list>
+            </mat-form-field> -->
+            <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedSize($event)">
+              <mat-option *ngFor="let fruit of filteredFruits | async" [value]="fruit">
+                {{fruit}}
+              </mat-option>
+            </mat-autocomplete> -->
+          </div>
+
+        </div>
+
+        <div class="col-12">
+          <div class="form-group">
+            <label for="uid">{{ "PRODUCT_OPTION" | translate }}</label>
+            <span *ngIf="!(model.id > 0)" style="color: red">(*)</span>
+            <!-- <mat-form-field class="example-chip-list">
+              <mat-chip-list #chipListOption aria-label="Fruit selection">
+                <mat-chip
+                  *ngFor="let fruit of model.productOption"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="removeOption(fruit)">
+                  {{fruit}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Input Option..."
+                  #fruitInput
+                  [formControl]="fruitCtrl"
+                  [matChipInputFor]="chipListOption"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="addOnBlur"
+                  (matChipInputTokenEnd)="addOption($event)">
+              </mat-chip-list>
+
+            </mat-form-field> -->
+            <br>
+            <button class="btn btn-primary btn-sm" (click)="formArrayOption.push(getFormGroupOption(null))">Add</button>
+            <div [formGroup]="formArrayOption">
+              <div *ngFor="let group of formArrayOption.controls; let i = index" [formGroup]="group">
+
+                <div class="form-row align-items-center">
+                  <div class="col-sm-6 md-6 my-1">
+                    <label class="sr-only" >Name</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div *ngIf="group.get('name').invalid" style="color: red" class="input-group-text">*</div>
+                      </div>
+                      <input  class="form-control"  type="text" placeholder="Topping....." formControlName="name">
+                    </div>
+                  </div>
+                  <div class="col-sm-6 md-6 my-1">
+                    <label class="sr-only" >Price</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div *ngIf="group.get('price').invalid" style="color: red" class="input-group-text">*</div>
+                      </div>
+                      <input type="text" class="form-control"  placeholder="price....." formControlName="price">
+                    </div>
+                  </div>
+                </div>
+                <!-- <span *ngIf="group.get('name').invalid && group.get('name').touched" style="color: red" >*</span>
+                <input class="form-control" placeholder="Topping....." formControlName="name" />
+                <input class="form-control" placeholder="price....." formControlName="price" />
+                <span *ngIf="group.get('price').invalid && group.get('price').touched" style="color: red" >*</span> -->
+                <button class="btn btn-warning btn-sm" (click)="formArrayOption.removeAt(i)">{{'Remove' | translate}}</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="allfarm">{{
+              "PRODUCT_STATUS" | translate
+            }}</label>
+            &nbsp;
+            <app-leo-checkbox [(checked)]="model.status"></app-leo-checkbox>
+            <!-- <ejs-checkbox [(ngModel)]="model.status"></ejs-checkbox> -->
+          </div>
+        </div>
+
+        <!-- <div class="col-md-6">
+          <div class="form-group">
+            <label for="status">{{ "PRODUCT_STATUS" | translate }}</label>
+            <input
+              [(ngModel)]="model.status"
+              type="number"
+              class="form-control"
+            />
+          </div>
+        </div> -->
+
+        <div class="col-12 mb-2">
+          <label for="body">{{ "PRODUCT_DESCRIPTION" | translate }}</label>
+
+          <ejs-richtexteditor  [toolbarSettings]='tools' saveInterval='1' [showCharCount]='true' maxLength='5000'   [(value)]='model.productDescription'>
+
+            </ejs-richtexteditor>
+        </div>
+
+
+
+        <div class="col-12 text-center">
+
+
+          <div class="kv-avatar">
+            <div class="file-loading">
+              <input
+                id="avatar-1"
+                name="avatar-1"
+                (change)="onFileChangeLogo($event)"
+                type="file"
+                required
+              />
+            </div>
+          </div>
+          <div class="kv-avatar-hint">
+            <small>{{ "Select file < 5000 KB" | translate }}</small>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label>{{ "PRODUCT_COMMENT" | translate }}</label>
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              [(ngModel)]="model.comment"
+              cols="4"
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+
+  </div>
+
+    <div class="modal-footer">
+      <div class="mr-auto" *ngIf="model?.id > 0">
+        <p>
+          <span class="mr-2">
+            <span class="my-font-weight-bold">{{ "Create by" | translate }}</span>
+            : {{ audit?.createBy }}</span
+          >
+          <span
+            ><span class="my-font-weight-bold">{{
+              "Create date time" | translate
+            }}</span>
+            : {{ audit?.createDate }}</span
+          >
+        </p>
+        <p>
+          <span class="mr-2"
+            ><span class="my-font-weight-bold">{{
+              "Update by" | translate
+            }}</span>
+            : {{ audit?.updateBy }}</span
+          >
+          <span
+            ><span class="my-font-weight-bold">{{
+              "Update date time" | translate
+            }}</span>
+            : {{ audit?.updateDate }}</span
+          >
+        </p>
+      </div>
+      <span *ngIf="!(model.id > 0)" class="my-note mr-auto">
+        {{ "Note: (*) is a required field" | translate }}
+      </span>
+      <button
+        type="button"
+        class="btn btn-light"
+        ngbTooltip="CLOSE"
+        (click)="modal.close('Close click')"
+      >
+        {{ "CLOSE" | translate }}
+      </button>
+      <button
+        type="submit"
+        [disabled]="!model.productName
+        || !model.categoryGuid
+        || !model.productPrice
+        "
+        (click)="save()"
+        ngbTooltip="SAVE"
+        class="btn btn-primary"
+      >
+        {{ "SAVE" | translate }}
+      </button>
+    </div>
+  </ng-template>
+
+</div>

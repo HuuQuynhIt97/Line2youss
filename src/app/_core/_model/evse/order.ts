@@ -1,0 +1,33 @@
+export interface Order {
+    id: number;
+    totalPrice: number | null;
+    cashReceived: number | null;
+    isDelete: boolean;
+    byingStatus: boolean;
+    pendingStatus: boolean;
+    completeStatus: boolean;
+    fullName: string | null;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    status: number | null;
+    startDate: string | null;
+    endDate: string | null;
+    guid: string;
+    accountId: number;
+    productGuid: string;
+    orderGuid: string;
+    storeGuid: string;
+    customerName: string;
+    customerAddress: string;
+    customerPhone: string;
+    customerEmail: string;
+    paymentType: string;
+    isPayment: string;
+    delivery: string;
+    tableNo: string;
+    quantity: number;
+    products: any;
+    price: any;
+}

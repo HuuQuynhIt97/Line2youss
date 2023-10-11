@@ -1,0 +1,380 @@
+
+<ngx-spinner [fullScreen]="true" type="square-jelly-box" size="medium">
+  <p class="loading">Loading data...</p>
+</ngx-spinner>
+
+<!-- <app-navbar-mobile></app-navbar-mobile> -->
+
+<!-- restaurent top -->
+<div style="position: sticky !important;" class="page-banner p-relative smoothscroll" id="menu">
+    <swiper
+    [loop]="true"
+    [navigation]="true"
+    [autoplay]="{ delay: 2000, disableOnInteraction: false }"
+    [pagination]="{ clickable: true, dynamicBullets: true }"
+    >
+        <ng-container  *ngFor="let item_banner of banners; let i = index">
+            <ng-template  swiperSlide>
+                <img 
+                style="cursor: pointer;"
+                [src]="imagePath(item_banner.thumbnail) "
+                sizes="(min-width:960px) calc(100vw - 352px),100vw"
+                class="img-fluid full-width" alt="banner">
+                   
+            </ng-template>
+        </ng-container>
+    </swiper>
+</div>
+<!-- restaurent top -->
+
+<!-- restaurent details -->
+<section class="restaurent-details  u-line">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="heading padding-tb-10">
+                    <h3 class="text-light-black title fw-700 no-margin">{{storeInfo.storeName}}</h3>
+                    <p class="text-light-black sub-title no-margin"  [innerHTML]="safeHtml(storeInfo.body)">
+                        <!-- <span>
+                            <a routerLink="/checkout" class="text-success">Change locations</a>
+                        </span> -->
+                    </p>
+                    <div class="head-rating">
+                        <div class="rating"> 
+                            <ngb-rating [(rate)]="storeInfo.ratingAVG" [max]="5" [readonly]="true" >
+                                <ng-template let-fill="fill" let-index="index">
+                                    <i class="fas fa-star" [class.filled]="fill === 100" [class.low]="index < 5"></i>
+                                </ng-template>
+                            </ngb-rating>
+                        </div>
+                        <div class="product-review">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="restaurent-logo">
+                    <img 
+                    [src]="imagePath(storeInfo.photoPath) "
+                    class="img-fluid" 
+                    alt="#">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- restaurent details -->
+
+<!-- restaurent tab -->
+<div class="restaurent-tabs u-line">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="restaurent-menu scrollnav">
+                    <ul class="nav nav-pills">
+                        <li class="nav-item"> <a class="nav-link active text-light-white fw-700" data-toggle="pill" href="#menu">{{'Menu'| translate}}</a>
+                        </li>
+                        <li class="nav-item"> <a class="nav-link text-light-white fw-700" data-toggle="pill" href="#about">{{'About' | translate}}</a>
+                        </li>
+                        <li class="nav-item"> <a class="nav-link text-light-white fw-700" data-toggle="pill" href="#review">{{'Reviews' | translate}}</a>
+                        </li>
+                        <!-- <li class="nav-item"> 
+                            <a href="javascript:void(0)" (click)="printData()" class="nav-link text-green-white fw-700" data-toggle="pill" >
+                                {{'Home.Review.QRCode.label' | translate}}
+                            </a>
+                        </li> -->
+                        <!-- <li class="nav-item"> <a class="nav-link text-light-white fw-700" data-toggle="pill" href="#mapgallery">Map & Gallery</a>
+                        </li> -->
+                    </ul>
+                    <!-- <div class="add-wishlist">
+                        <img src="assets/img/svg/013-heart-1.svg" alt="tag">
+                    </div> -->
+                </div>
+            </div>
+            <!-- <div class="col-md-4 text-left">
+                <div class='center '>
+                    <ejs-qrcodegenerator style="display: block;" id='qrcode' #barcode
+                    width="100px" height="130px" [displayText]='displayTextMethod' mode="SVG" [value]="qrcode">
+                    </ejs-qrcodegenerator>
+                </div>
+                <div><label>Name:</label> {{'name'}}</div>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- restaurent tab -->
+
+<!-- restaurent address -->
+
+<!-- restaurent address -->
+
+<!-- restaurent meals -->
+<section class="section-padding restaurent-meals bg-light-theme">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-1 col-lg-1">
+                <!-- <app-restaurantleftsidebar></app-restaurantleftsidebar>   -->
+            </div>
+            <div class="col-xl-8 col-lg-8">
+                <div class="row">
+                    <div class="col-lg-12 restaurent-meal-head mb-md-40">
+                        <ng-container *ngFor="let _products of products">
+                            <ng-container *ngIf="_products?.list_product.length > 0; else elseTemplate">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="section-header-left">
+                                            <h3 class="text-light-black header-title">
+                                                <a class="card-link text-light-black no-margin" data-toggle="collapse" href="#collapseTwo">
+                                                    {{_products.category}}
+                                                </a>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div id="collapseTwo" class="collapse show">
+                                        <div class="card-body no-padding">
+                                            <div class="row">
+                                                <ng-container *ngFor="let item of _products?.list_product">
+                                                    <div class="col-lg-12">
+                                                        <div class="restaurent-product-list">
+                                                            <div class="restaurent-product-detail">
+                                                                <div class="restaurent-product-left">
+                                                                    <div class="restaurent-product-title-box">
+                                                                        <div class="restaurent-product-box">
+                                                                            <div class="restaurent-product-title">
+                                                                                <h6 class="mb-2" data-toggle="modal" data-target="#restaurent-popup">
+                                                                                    <a href="javascript:void(0)" class="text-light-black fw-600">
+                                                                                        {{item.productName}}
+                                                                                    </a> 
+<!-- 
+                                                                                    <a  *ngIf="item.totalOrder > 0 && item.cartCreateBy === user?.id"
+                                                                                        style="background-color: #e21b70;"
+                                                                                        class="text-light-black fw-600" 
+                                                                                        >
+                                                                                        {{item.totalOrder}} x
+                                                                                    </a> -->
+                                                                                </h6>
+                                                                                <!-- <p class="text-light-white">600-700 Cal.</p> -->
+                                                                            </div>
+                                                                            <div class="restaurent-product-label"> 
+                                                                                <span  class="rectangle-tag bg-gradient-orange text-custom-white">
+                                                                                    <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" id="IconChangeColor"> <path fill-rule="evenodd" clip-rule="evenodd" d="M11 8H4V7H11V8Z" fill="#ffffff" id="mainIconPathAttribute"></path> </svg>
+                                                                                </span>
+                                                                                <span  class="rectangle-tag bg-dark text-custom-white">
+                                                                                    <svg  
+                                                                                        aria-hidden="true" 
+                                                                                        focusable="false" class="fl-white" 
+                                                                                        width="16" height="16" 
+                                                                                        xmlns="http://www.w3.org/2000/svg" 
+                                                                                        xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                                                                        viewBox="0 0 24 24">
+                                                                                            <defs>
+                                                                                                <path 
+                                                                                                d="M13 4v7h7v2h-7.001L13 20h-2l-.001-7H4v-2h7V4h2z" 
+                                                                                                fill="#ffffff"
+                                                                                                id="sIcPlus"></path>
+                                                                                            </defs>
+                                                                                            <use  xlink:href="#sIcPlus" fill-rule="evenodd"></use>
+                                                                                    </svg>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- <div class="restaurent-product-rating">
+                                                                            <div class="ratings"> <span class="text-yellow"><i class="fas fa-star"></i></span>
+                                                                                <span class="text-yellow"><i class="fas fa-star"></i></span>
+                                                                                <span class="text-yellow"><i class="fas fa-star"></i></span>
+                                                                                <span class="text-yellow"><i class="fas fa-star"></i></span>
+                                                                                <span class="text-yellow"><i class="fas fa-star-half-alt"></i></span>
+                                                                            </div>
+                                                                            <div class="rating-text">
+                                                                                <p class="text-light-white fs-12 title">3845 ratings</p>
+                                                                            </div>
+                                                                        </div> -->
+                                                                    </div>
+                                                                    <div class="restaurent-product-caption-box"> 
+                                                                        <span class="text-light-white" [innerHTML]="safeHtml(item.productDescription)">
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="restaurent-product-img">
+                                                                    <img 
+                                                                    [src]="imagePath(item.photoPath)"
+                                                                    class="img-fluid" alt="#">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                                
+                                             
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                                
+                            </ng-template>
+                            
+                            
+                        </ng-container>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3">
+                <app-mobile-restaurantrightsidebar></app-mobile-restaurantrightsidebar>
+                <!-- <app-restaurantrightsidebar></app-restaurantrightsidebar>  -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- restaurent meals -->
+
+<!-- restaurent about -->
+<section class="section-padding restaurent-about smoothscroll" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="text-light-black fw-700 title">{{storeInfo.storeName}}</h3>
+                <p class="text-light-white no-margin">{{storeInfo.comment}}
+                <ul class="about-restaurent">
+                    <li> <i class="fas fa-map-marker-alt"></i>
+                        <span>
+            <a routerLink="/" class="text-light-white">
+                {{storeInfo.storeAddress}}
+            </a>
+            </span>
+                    </li>
+                    <li> <i class="fas fa-phone-alt"></i>
+                        <span><a href="tel:" class="text-light-white">{{storeInfo.storeTel}}</a></span>
+                    </li>
+                    <li> <i class="far fa-envelope"></i>
+                        <span><a href="mailto:" class="text-light-white">{{storeInfo.storeEmail}}</a></span>
+                    </li>
+                </ul>
+                <ul class="social-media pt-2">
+                    <li> <a [href]="storeInfo.facebook" ><i class="fab fa-facebook-f"></i></a>
+                    </li>
+                    <li> <a [href]="storeInfo.twitter"><i class="fab fa-twitter"></i></a>
+                    </li>
+                    <li> <a [href]="storeInfo.instagram"><i class="fab fa-instagram"></i></a>
+                    </li>
+                    <li> <a [href]="storeInfo.pinterest"><i class="fab fa-pinterest-p"></i></a>
+                    </li>
+                    <li> <a [href]="storeInfo.youtube"><i class="fab fa-youtube"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- restaurent about -->
+
+<!-- map gallery -->
+<!-- map gallery -->
+
+<!-- restaurent reviews -->
+<section class="section-padding restaurent-review smoothscroll" id="review">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="section-header-left">
+            <h3 class="text-light-black header-title title">{{'Reviews for' | translate}} {{storeInfo.storeName}}</h3>
+          </div>
+          <div class="restaurent-rating mb-xl-20">
+            <div class="star"> 
+                <ngb-rating [(rate)]="storeInfo.ratingAVG" [max]="5" [readonly]="true" >
+                    <ng-template let-fill="fill" let-index="index">
+                        <i class="fas fa-star" [class.filled]="fill === 100" [class.low]="index < 5"></i>
+                    </ng-template>
+                </ngb-rating>
+            </div>
+            <span class="fs-12 text-light-black">{{storeInfo.ratingCount}} {{'rating' | translate}}</span>
+          </div>
+          <div class="u-line"></div>
+        </div>
+        <div class="col-md-12">
+            <div class="review-box" *ngIf="!isRatingComment && isLogin">
+                <div class="review-user">
+                    <div class="review-user-img">
+                        <img 
+                        [src]="imagePathCustome(userImage)"
+                        style="width: 30px !important;"
+                        class="rounded-circle" alt="userimg">
+                        <div class="reviewer-name">
+                            <p class="text-light-black fw-600">{{username}} 
+                            </p>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="ratings"> 
+                    <ngb-rating [(rate)]="selected" [max]="5" (hover)="hovered=$event" (leave)="hovered=0">
+                        <ng-template let-fill="fill" let-index="index">
+                            <i class="fas fa-star" [class.filled]="fill === 100" [class.low]="index < 5"></i>
+                        </ng-template>
+                    </ngb-rating>
+                   
+                    <span style="color: transparent;"> | </span>
+                    <span style="color: red" class="text-light-black fs-12 rate-data">{{'your rating'}} (*)</span>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex flex-row align-items-start">
+                        <textarea [(ngModel)]="comment"  class="form-control ml-1 shadow-none textarea" placeholder="{{'what is your view' | translate}}">
+
+                        </textarea>
+                    </div>
+                    <div  class="mt-2 text-right">
+                        <button class="btn btn-primary btn-sm shadow-none" type="button">
+                            {{'Cancel comment' | translate}}
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm ml-1 shadow-none" type="button">
+                            {{'Post comment' | translate}}
+                        </button>
+                    </div>
+                </div>
+                <!-- <p class="text-light-black">Delivery was fast and friendly. Food was not great especially the salad. Will not be ordering from again. Too many options to settle for this place.</p> -->
+                
+            </div>
+            <ng-container *ngFor="let item_comment of ratingCommentData; let i=index">
+                <div class="review-box">
+                <div class="review-user">
+                    <div class="review-user-img">
+                    <img [src]="imagePathCustome(item_comment.comment_Picture)"
+                    style="width: 30px !important;" class="rounded-circle" alt="#">
+                    <div class="reviewer-name">
+                        <p class="text-light-black fw-600">{{item_comment.comment_By}} 
+                        </p>
+                    </div>
+                    </div>
+                    <div class="review-date"> <span class="text-light-white">
+                        {{item_comment.comment_Date | date:'MMM d, y'}}
+                    </span>
+                    </div>
+                </div>
+                <div class="ratings"> 
+                    <ngb-rating [(rate)]="item_comment.comment_Rating" [max]="5" >
+                        <ng-template let-fill="fill" let-index="index">
+                            <i class="fas fa-star" [class.filled]="fill === 100" [class.low]="index < 5"></i>
+                        </ng-template>
+                    </ngb-rating>
+                    
+                    <!-- <span class="ml-2 text-light-white">{{item_comment.comment_Date | dateAgo}}</span> -->
+                </div>
+                <p class="text-light-black">
+                    {{item_comment.comment}} 
+                </p>
+                
+                </div>
+            </ng-container>
+            
+        </div>
+      </div>
+    </div>
+</section>
+<!-- restaurent reviews -->
+
+<!-- offer near -->
+<!-- offer near -->
+
+<app-mobile-footer></app-mobile-footer>
