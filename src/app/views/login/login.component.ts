@@ -1,5 +1,5 @@
 
-import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewEncapsulation } from '@angular/core';
 import { AlertifyService } from '../../_core/_service/alertify.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -14,7 +14,11 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: [
+    './login.component.css',
+    '../../../assets/css/style.css'
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   username = '';
