@@ -25,25 +25,25 @@ import { SystemConfigService } from './_service/systemconfig.service';
       multi: true,
       deps: [AuthService],
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: sysConfInitializer,
-      multi: true,
-      deps: [SystemConfigService],
-    },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: sysConfInitializer,
+    //   multi: true,
+    //   deps: [SystemConfigService],
+    // },
     
-    {
-      provide: APP_INITIALIZER,
-      useFactory: lineLoginOrNotifyInitializer,
-      multi: true,
-      deps: [LineLoginOrNotifyService,Router],
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: languagesInitializer,
-      multi: true,
-      deps: [SystemLanguageService],
-    },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: lineLoginOrNotifyInitializer,
+    //   multi: true,
+    //   deps: [LineLoginOrNotifyService,Router],
+    // },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: languagesInitializer,
+    //   multi: true,
+    //   deps: [SystemLanguageService],
+    // },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
 })

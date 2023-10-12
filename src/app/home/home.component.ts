@@ -18,5 +18,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class HomeComponent {
+  constructor() {
+   
+  }
 
+  ngOnInit() {
+    // Your component initialization code here.
+  }
 }

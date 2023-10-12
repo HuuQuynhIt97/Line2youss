@@ -2,13 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>AngularRoutingTutorial</title>
+  <title>Line2u.acv-vision.com</title>
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
+  <script>
+    var protocol = window.location.protocol;
+    var ip = window.location.hostname;
+    var environment_dev = {
+      production: false,
+      apiUrl: `${protocol}//${ip}:58/api/`,
+    };
+    var environment_pro = {
+      production: true,
+      apiUrl: `${protocol}//${ip}/api/`,
+    };
+    // sysConfInitializer
+    fetch(`${environment_dev.apiUrl}SystemConfig/LoadDataSystem`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }).then(data => {
+      localStorage.setItem('sysConf', JSON.stringify(data));
+    }).catch(error => {
+      console.error('Lỗi:', error);
+    });
+
+    // lineLoginOrNotifyInitializer
+
+    if (window.location.href.indexOf('tokenLogin=') > 0) {
+        let token = window.location.href.split('?')[1].replace('tokenLogin=', '');
+        let userID = JSON.parse(localStorage.getItem('user'))?.uid || 0
+        fetch(`${environment_dev.apiUrl}Line/GetProfile?accessToken=${token}&userID=${userID}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        }).then(data => {
+          var isLogin_Cus_url = localStorage.getItem('isLogin_Cus')
+          window.location.href = isLogin_Cus_url;
+        }).catch(error => {
+          console.error('Lỗi:', error);
+        });
+      }
+    else 
+    {
+      fetch(`${environment_dev.apiUrl}Line/GetProfileFake?accessToken=${token= ""}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      }).then(data => {
+        console.log('loadProfileFake')
+      }).catch(error => {
+        console.error('Lỗi:', error);
+      });
+    }
+    // languagesInitializer
+    fetch(`${environment_dev.apiUrl}SystemLanguage/getLanguages?lang=${localStorage.getItem('lang') || 'tw'}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    }).then(data => {
+      localStorage.setItem('languages', JSON.stringify(data));
+    }).catch(error => {
+      console.error('Lỗi:', error);
+    });
+
+  </script>
   <script src="./assets/js/jquery.min7ef2.js"></script>
   <script src="./assets/js/plugin.min7ef2.js"></script>
   <script src="./assets/js/jquery.fancybox.min7ef2.js"></script>

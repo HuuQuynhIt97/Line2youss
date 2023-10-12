@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { CURDService, UtilitiesService } from 'herr-core';
-import { environment } from 'src/environments/environment';
 import { SystemConfig } from '../_model/systemconfig';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })

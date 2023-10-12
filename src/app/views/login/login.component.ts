@@ -43,25 +43,25 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     private trans: TranslateService
   ) {
     this.loadLang()
-    // if (this.cookieService.get('remember') !== undefined) {
-    //   if (this.cookieService.get('remember') === 'Yes') {
-    //     this.key = this.cookieService.get('key_temp');
-    //     this.remember = true;
-    //     this.loginRememberMe(+this.key);
-    //   }
-    // }
+    if (this.cookieService.get('remember') !== undefined) {
+      if (this.cookieService.get('remember') === 'Yes') {
+        this.key = this.cookieService.get('key_temp');
+        this.remember = true;
+        this.loginRememberMe(+this.key);
+      }
+    }
     let isLineAccount = JSON.parse(localStorage.getItem('user'))?.isLineAccount
     console.log(isLineAccount)
-    // if(isLineAccount === "1") {
-    //   this.removeLocalStore('user')
-    //   this.removeLocalStore('token')
-    //   this.router.navigateByUrl('/login');
-    //   let backUrl = '/line2u/home';
-    //   this.uri = backUrl
-    // }else {
-    //   let backUrl = '/line2u/home';
-    //   this.uri = this.route.snapshot.queryParams.uri !== undefined ? this.route.snapshot.queryParams.uri : backUrl  || backUrl;
-    // }
+    if(isLineAccount === "1") {
+      this.removeLocalStore('user')
+      this.removeLocalStore('token')
+      this.router.navigateByUrl('/login');
+      let backUrl = '/line2u/home';
+      this.uri = backUrl
+    }else {
+      let backUrl = '/line2u/home';
+      this.uri = this.route.snapshot.queryParams.uri !== undefined ? this.route.snapshot.queryParams.uri : backUrl  || backUrl;
+    }
   }
   role: number;
   ngAfterViewInit(): void {
@@ -82,24 +82,24 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     const accessToken = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refresh_token');
     let isLineAccount = JSON.parse(localStorage.getItem('user'))?.isLineAccount
-    // if (accessToken && refreshToken && this.route.routeConfig.path === 'login') {
-    //   let backUrl = '/line2u/home';
-    //   const uri = decodeURI(this.uri) || backUrl;
-    //   this.router.navigate([uri]);
-    // }
-    // if (this.authService.loggedIn()) {
-    //   if(isLineAccount === "1") {
-    //     this.removeLocalStore('user')
-    //     this.removeLocalStore('token')
-    //     let backUrl = '/login';
-    //     const uri = decodeURI(this.uri) || backUrl;
-    //     this.router.navigate([uri]);
-    //   }else {
-    //     let backUrl = '/line2u/home';
-    //     const uri = decodeURI(this.uri) || backUrl;
-    //     this.router.navigate([uri]);
-    //   }
-    // }
+    if (accessToken && refreshToken && this.route.routeConfig.path === 'login') {
+      let backUrl = '/line2u/home';
+      const uri = decodeURI(this.uri) || backUrl;
+      this.router.navigate([uri]);
+    }
+    if (this.authService.loggedIn()) {
+      if(isLineAccount === "1") {
+        this.removeLocalStore('user')
+        this.removeLocalStore('token')
+        let backUrl = '/login';
+        const uri = decodeURI(this.uri) || backUrl;
+        this.router.navigate([uri]);
+      }else {
+        let backUrl = '/line2u/home';
+        const uri = decodeURI(this.uri) || backUrl;
+        this.router.navigate([uri]);
+      }
+    }
   }
   back() {
     const uri = this.router.url;

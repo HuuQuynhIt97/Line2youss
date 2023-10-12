@@ -8,11 +8,18 @@ import { ProductsComponent } from './products/products.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { NoPageFoundComponent } from './no-page-found/no-page-found.component';
 import { LoginComponent } from './views/login/login.component';
+import { SystemConfigService } from './_core/_service/systemconfig.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'admin/login', component: LoginComponent },
+  { 
+    path: 'home', 
+    component: HomeComponent 
+  },
+  { 
+    path: 'admin/login', 
+    component: LoginComponent 
+  },
   { path: 'about', component: AboutComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'product-detail/:id', component: ProductDetailComponent },
@@ -23,7 +30,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     HomeComponent,
-    LoginComponent,
+    // LoginComponent,
     AboutComponent,
     ContactComponent,
     ProductsComponent,
