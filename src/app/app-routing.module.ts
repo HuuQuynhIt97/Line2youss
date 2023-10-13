@@ -17,7 +17,7 @@ const routes: Routes = [
     component: HomeComponent 
   },
   { 
-    path: 'admin/login', 
+    path: 'xAdmin', 
     component: LoginComponent 
   },
   { path: 'about', component: AboutComponent },
